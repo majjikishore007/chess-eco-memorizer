@@ -21,6 +21,10 @@
     "request": "^2.88.2",
     "request-promise": "^4.2.6"
   },
+    "repository": {
+    "type": "git",
+    "url": "git+https://github.com/majjikishore007/chess-eco-memorizer"
+  },
   "devDependencies": {
     "nodemon": "^2.0.15"
   }

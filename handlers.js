@@ -1,21 +1,28 @@
 const { getData } = require("./helpers/scrapping")
-
-const getOpeningDataByCode = async (req, res, next, code) => {
-
-    console.log("getting opening data by code");
-    const data = await getData()
-    const result = data.filter(d => d.code === code)
-    console.log("result: " + result.length);
-    if (result == null|| result.length === 0) {
-        return res.status(400).json({
-             error:"Opening not found"
-        })
+const Eco = require("./models/eco");
+const getAllEcos = (req, res) => {
+  Eco.find().exec((err, ecos) => {
+    if (err) {
+      return res.status(404).json({
+        error: "product not found",
+      });
     }
-    res.result = result;
-    next();
-}
-
-const getOpeningData = (req, res)=>{ 
-  return res.json(res.result);
+    res.send(ecos);
+  });
 };
-module.exports ={getOpeningDataByCode,getOpeningData}
+const getOpeningDataByCode = async (req, res, next, code) => {
+  Eco.find({ code }).exec((err, eco) => {
+    if (err) {
+      return res.status(404).json({
+        error: "product not found",
+      });
+    }
+    req.result = eco;
+    next();
+  });
+};
+
+const getOpeningData = (req, res) => {
+  return res.json(req.result);
+};
+module.exports = { getOpeningDataByCode, getOpeningData, getAllEcos };

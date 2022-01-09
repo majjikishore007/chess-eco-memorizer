@@ -1,7 +1,7 @@
 const axios = require("axios");
 const cheerio = require("cheerio");
 const pretty = require("pretty");
-
+const Eco = require("../models/eco");
 //data we need to extract from the html file
 // [
 //     {
@@ -24,9 +24,9 @@ const pretty = require("pretty");
 // </tr>
 
 const url = "https://www.chessgames.com/chessecohelp.html";
-const result = [];
 
-const getData = async () => {
+const loadData = async () => {
+  console.log("loading ........");
   const { data } = await axios.get(url);
   const $ = cheerio.load(data);
   const trElement = $("tr");
@@ -43,9 +43,16 @@ const getData = async () => {
     data.code = code;
     data.opening = opening;
     data.move = move;
-    result.push(data);
+    var eco = new Eco(data);
+    eco.save((err, eco) => {
+      if (err) {
+        return res.status(400).json({
+          error: "Unable to save the todo list ",
+        });
+      }
+    });
+    console.log("loading complete :)");
   });
-  return result;
 };
 
-module.exports = { getData };
+module.exports = { loadData };
