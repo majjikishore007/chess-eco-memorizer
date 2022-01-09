@@ -46,9 +46,7 @@ const loadData = async () => {
     var eco = new Eco(data);
     eco.save((err, eco) => {
       if (err) {
-        return res.status(400).json({
-          error: "Unable to save the todo list ",
-        });
+          return "Unable to save the todo list ";
       }
     });
     console.log("loading complete :)");
